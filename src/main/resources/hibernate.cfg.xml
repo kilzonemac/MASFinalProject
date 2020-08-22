@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">org.h2.Driver</property>
+        <property name="connection.url">jdbc:h2:~/db-test.h2</property>
+        <property name="connection.username">sa</property>
+        <property name="connection.password">sa</property>
+
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">validate</property>
+
+        <mapping class="model.bikeservice.Bike"/>
+        <mapping class="model.bikeservice.BikeModel"/>
+        <mapping class="model.bikeservice.BikeInspection"/>
+        <mapping class="model.bikeservice.BikePart"/>
+        <mapping class="model.bikeservice.BikeRepair"/>
+        <mapping class="model.bikeservice.BikeOrder"/>
+        <mapping class="model.bikeservice.Service"/>
+        <mapping class="model.bikeservice.ServiceRepairer"/>
+
+        <mapping class="model.user.Client"/>
+        <mapping class="model.user.Repairer"/>
+        <mapping class="model.user.Seller"/>
+        <mapping class="model.user.User"/>
+        <mapping class="model.user.Worker"/>
+
+
+
+    </session-factory>
+</hibernate-configuration>
