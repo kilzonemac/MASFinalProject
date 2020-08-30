@@ -1,12 +1,7 @@
 package model.bikeservice;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 public class Bike {
@@ -15,39 +10,40 @@ public class Bike {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
 
+    @Column(nullable = false)
     private LocalDate deliveryDate;
 
+    @Column(nullable = false)
     private double cost;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String serialNumber;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name="bikeModel_id", nullable=false)
     private BikeModel bikeModel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="bikeOrder_id")
+    private BikeOrder bikeOrder;
 
     public Bike(LocalDate deliveryDate, double cost, String serialNumber, BikeModel bikeModel) {
         this.deliveryDate = deliveryDate;
         this.serialNumber = serialNumber;
-        this.bikeModel = bikeModel;
         this.cost = cost;
+
+        setBikeModel(bikeModel);
     }
 
     public Bike() {
     }
 
-    public static List<Bike> getAllBikes(){
-        SessionFactory sessionFactory = new Configuration().configure()
-                .buildSessionFactory();
+    public BikeOrder getBikeOrder() {
+        return bikeOrder;
+    }
 
-        Session session = sessionFactory.openSession();
-
-        @SuppressWarnings("unchecked")
-        List<Bike> bikes = session.createQuery("FROM model.bikeservice.Bike").list();
-
-        session.close();
-        sessionFactory.close();
-
-        return bikes;
+    public void setBikeOrder(BikeOrder bikeOrder) {
+        this.bikeOrder = bikeOrder;
     }
 
     public int getId() {
@@ -87,6 +83,7 @@ public class Bike {
     }
 
     public void setBikeModel(BikeModel bikeModel) {
+        bikeModel.addBike(this);
         this.bikeModel = bikeModel;
     }
 }

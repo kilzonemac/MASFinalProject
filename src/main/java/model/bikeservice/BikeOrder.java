@@ -2,12 +2,15 @@ package model.bikeservice;
 
 import model.bikeservice.enums.OrderState;
 import model.user.Client;
+import model.user.Seller;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class BikeOrder {
@@ -19,36 +22,36 @@ public class BikeOrder {
     @Enumerated(EnumType.ORDINAL)
     private OrderState orderState;
 
+    @Column(nullable = false)
     private double cost;
 
+    @Column(nullable = false)
     private LocalDate orderDate;
 
+    @Column(nullable = false)
     private String deliveryAddress;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="client_id", nullable=false)
     private Client client;
 
-    public BikeOrder(OrderState orderState, double cost, LocalDate orderDate, String deliveryAddress) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="seller_id", nullable=false)
+    private Seller seller;
+
+    @OneToMany(mappedBy="bikeOrder")
+    private List<Bike> orderedBikes = new ArrayList<>();
+
+    public BikeOrder(OrderState orderState, double cost, LocalDate orderDate, String deliveryAddress, int discount) {
         this.orderState = orderState;
-        this.cost = cost;
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
+
+        //discountCount
+        this.cost = cost - (((double)discount/100) * cost);
     }
 
     public BikeOrder() {
-    }
-
-    public static void deleteCanceledOrders(){
-        SessionFactory sessionFactory = new Configuration().configure()
-                .buildSessionFactory();
-
-        Session session = sessionFactory.openSession();
-
-        Query q = session.createQuery("delete BikeOrder where orderState = 3");
-        q.executeUpdate();
-
-        session.close();
-        sessionFactory.close();
     }
 
     public Client getClient() {
@@ -56,8 +59,28 @@ public class BikeOrder {
     }
 
     public void setClient(Client client) {
-        client.addOrder(this);
         this.client = client;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public List<Bike> getOrderedBikes() {
+        return orderedBikes;
+    }
+
+    public void addBike(Bike bike){
+        bike.setBikeOrder(this);
+        orderedBikes.add(bike);
+    }
+
+    public void acceptOrder(){
+        this.orderState = OrderState.ACCEPTED;
+    }
+
+    public void cancelOrder(){
+        this.orderState = OrderState.CANCELED;
     }
 
     public int getId() {

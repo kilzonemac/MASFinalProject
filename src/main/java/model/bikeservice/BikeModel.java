@@ -3,6 +3,7 @@ package model.bikeservice;
 import javafx.beans.property.SimpleStringProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,8 +17,8 @@ public class BikeModel {
     private SimpleStringProperty color = new SimpleStringProperty();
     private SimpleStringProperty manufacture = new SimpleStringProperty();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Bike> bikes;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "bikeModel")
+    private List<Bike> bikes = new ArrayList<>();
 
     public BikeModel(String modelName, String bikeType, String color, String manufacture) {
         this.modelName = new SimpleStringProperty(modelName);
@@ -38,6 +39,10 @@ public class BikeModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void addBike(Bike bike){
+        bikes.add(bike);
     }
 
     @Column(name="ModelName")

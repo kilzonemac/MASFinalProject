@@ -38,12 +38,12 @@
             <Label text="Kod pocztowy" GridPane.rowIndex="6" />
             <TextField fx:id="name" prefWidth="248.0" GridPane.columnIndex="1" />
             <TextField fx:id="surname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="phone" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="street" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="city" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="postCode" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label text="E-mail" GridPane.rowIndex="2" />
-            <TextField fx:id="email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <Label fx:id="insertLabel" layoutX="52.0" layoutY="42.0" prefHeight="25.0" prefWidth="265.0" text="Wprowadź dane do zamówienia:">
@@ -57,14 +57,14 @@
             <Separator prefWidth="200.0" BorderPane.alignment="CENTER" />
          </bottom>
          <left>
-            <Label text="Wybrany model:" BorderPane.alignment="CENTER">
+            <Label text="Suma:" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
          </left>
          <center>
-            <Label fx:id="bikeLabel" text="Gan Disk, Szosowy, Szary, PINARELLO " BorderPane.alignment="CENTER">
+            <Label fx:id="bikeLabel" text="999zł" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Italic" size="14.0" />
                </font>
@@ -78,7 +78,7 @@
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="103.0" text="Edytuj dane">
+            <Button mnemonicParsing="false" onAction="#editButtonAction" prefHeight="25.0" prefWidth="103.0" text="Edytuj dane">
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>

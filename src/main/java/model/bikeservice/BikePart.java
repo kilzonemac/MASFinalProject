@@ -12,8 +12,16 @@ public class BikePart {
 
     private String name;
 
-    private String cost;
+    private double cost;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "bikeParts")
     private List<BikeRepair> bikeRepairs;
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
 }
