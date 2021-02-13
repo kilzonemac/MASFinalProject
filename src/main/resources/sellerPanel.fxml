@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SellerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SellerController">
    <center>
-      <TableView fx:id="tableView" prefHeight="424.0" prefWidth="430.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableView" prefHeight="434.0" prefWidth="600.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="firstName" minWidth="50.0" prefWidth="81.0" text="Imie" />
-          <TableColumn fx:id="surname" minWidth="50.0" prefWidth="93.0" text="Nazwisko" />
-            <TableColumn fx:id="address" minWidth="0.0" prefWidth="160.0" text="Adres" />
+          <TableColumn fx:id="firstName" prefWidth="81.0" text="Imie" />
+          <TableColumn fx:id="surname" prefWidth="60.0" text="Nazwisko" />
+            <TableColumn fx:id="street" minWidth="0.0" prefWidth="160.0" text="Ulica" />
+            <TableColumn fx:id="city" minWidth="0.0" prefWidth="160.0" text="Miasto" />
+            <TableColumn fx:id="postCode" minWidth="0.0" prefWidth="160.0" text="Kod pocztowy" />
             <TableColumn fx:id="orderCount" minWidth="17.0" prefWidth="95.0" text="Ilość zamówień" />
         </columns>
          <columnResizePolicy>
@@ -22,13 +25,24 @@
       </TableView>
    </center>
    <top>
-      <Label text="Client List" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="System Bold" size="21.0" />
-         </font>
-         <BorderPane.margin>
-            <Insets bottom="10.0" />
-         </BorderPane.margin>
-      </Label>
+      <BorderPane prefHeight="26.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <right>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonAction" prefHeight="25.0" prefWidth="99.0" text="Powrót" BorderPane.alignment="TOP_RIGHT">
+               <BorderPane.margin>
+                  <Insets right="20.0" top="13.0" />
+               </BorderPane.margin>
+            </Button>
+         </right>
+         <center>
+            <Label text="Lista klientów" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="100.0" top="10.0" />
+               </BorderPane.margin>
+            </Label>
+         </center>
+      </BorderPane>
    </top>
 </BorderPane>

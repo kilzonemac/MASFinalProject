@@ -29,6 +29,20 @@ public class SellerDao implements Dao<Seller> {
         return null;
     }
 
+    public Seller getByLoginAndPassword(String login, String password){
+        login = "'" + login + "'";
+        password = "'" + password + "'";
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List<Seller> sellers = (List<Seller>)session.createQuery("FROM model.user.Seller WHERE login = " + login + " AND password = " + password).list();
+            if(sellers != null && sellers.size() > 0){
+                return sellers.get(0);
+            }
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public List<Seller> getAll() {
         return null;

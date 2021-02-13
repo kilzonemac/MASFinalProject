@@ -31,6 +31,23 @@ public class ClientDao implements Dao<Client> {
         return null;
     }
 
+    public Client getByLoginAndPassword(String login, String password){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            login = "'" + login + "'";
+            password = "'" + password + "'";
+
+            List<Client> clients = (List<Client>)session.createQuery("FROM model.user.Client WHERE login = " + login + " AND password = " + password).list();
+            if(clients != null && clients.size() > 0){
+                return clients.get(0);
+            }
+
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     @Override
     public List<Client> getAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

@@ -3,6 +3,7 @@ package controller;
 import dao.BikeDao;
 import dao.ClientDao;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -16,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.bikeservice.Bike;
 import model.user.Client;
+import view.LoginDialog;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,10 +36,20 @@ public class SellerController implements Initializable {
     private TableColumn<Client, String> surname;
 
     @FXML
-    private TableColumn<Client, String> address;
+    private TableColumn<Client, String> street;
+
+    @FXML
+    private TableColumn<Client, String> city;
+
+    @FXML
+    private TableColumn<Client, String> postCode;
 
     @FXML
     private TableColumn<Client, Integer> orderCount;
+
+    private Stage orderStage;
+
+    private Stage sellerStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -45,7 +57,22 @@ public class SellerController implements Initializable {
 
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
         surname.setCellValueFactory(new PropertyValueFactory<>("surname"));
-        address.setCellValueFactory(new PropertyValueFactory<>("address"));
+
+        street.setCellValueFactory(p -> {
+                    String [] address = p.getValue().getAddress().split(",");
+                    return new SimpleStringProperty(address[0]);
+        });
+
+        city.setCellValueFactory(p -> {
+            String [] address = p.getValue().getAddress().split(",");
+            return new SimpleStringProperty(address[1]);
+        });
+
+        postCode.setCellValueFactory(p -> {
+            String [] address = p.getValue().getAddress().split(",");
+            return new SimpleStringProperty(address[2]);
+        });
+
         orderCount.setCellValueFactory(new PropertyValueFactory<>("orderCount"));
 
         tableView.setRowFactory( tv -> {
@@ -83,6 +110,12 @@ public class SellerController implements Initializable {
         }
     }
 
+    @FXML
+    public void backButtonAction() {
+        sellerStage.close();
+        orderStage.show();
+    }
+
     private ObservableList<Client> loadClients() {
 
         ObservableList<Client> observableClientList = FXCollections.observableArrayList();
@@ -91,4 +124,19 @@ public class SellerController implements Initializable {
         return observableClientList;
     }
 
+    public Stage getOrderStage() {
+        return orderStage;
+    }
+
+    public void setOrderStage(Stage orderStage) {
+        this.orderStage = orderStage;
+    }
+
+    public Stage getSellerStage() {
+        return sellerStage;
+    }
+
+    public void setSellerStage(Stage sellerStage) {
+        this.sellerStage = sellerStage;
+    }
 }

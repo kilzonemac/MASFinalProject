@@ -128,7 +128,6 @@
       <Position>1</Position>
       <DataType>INTEGER(10)|4s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
     </column>
     <column id="40" parent="7" name="BIKETYPE">
       <Position>2</Position>

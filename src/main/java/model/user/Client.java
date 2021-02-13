@@ -51,6 +51,10 @@ public class Client extends User {
         return discount;
     }
 
+    public List<BikeOrder> getBikeOrders() {
+        return bikeOrders;
+    }
+
     public void addService(Service service){
         service.setClient(this);
         services.add(service);

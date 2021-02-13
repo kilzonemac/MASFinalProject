@@ -1,30 +1,18 @@
 package controller;
 
 import dao.BikeOrderDao;
-import dao.ClientDao;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
-import model.bikeservice.Bike;
 import model.bikeservice.BikeOrder;
 import model.user.Client;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class ClientOrderSummaryController {
 
@@ -32,7 +20,13 @@ public class ClientOrderSummaryController {
     private TableView<BikeOrder> tableView;
 
     @FXML
-    private TableColumn<BikeOrder, String> deliveryAddress;
+    private TableColumn<BikeOrder, String> street;
+
+    @FXML
+    private TableColumn<BikeOrder, String> city;
+
+    @FXML
+    private TableColumn<BikeOrder, String> postCode;
 
     @FXML
     private TableColumn<BikeOrder, String> orderState;
@@ -52,7 +46,12 @@ public class ClientOrderSummaryController {
         //add your data to the table here.
         tableView.setItems(loadOrdersForClient(client));
 
-        deliveryAddress.setCellValueFactory(new PropertyValueFactory<>("deliveryAddress"));
+        String [] address = client.getAddress().split(",");
+
+        street.setCellValueFactory(p -> new SimpleStringProperty(address[0]));
+        city.setCellValueFactory(p -> new SimpleStringProperty(address[1]));
+        postCode.setCellValueFactory(p -> new SimpleStringProperty(address[2]));
+
         orderState.setCellValueFactory(new PropertyValueFactory<>("orderState"));
         cost.setCellValueFactory(new PropertyValueFactory<>("cost"));
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -61,7 +60,7 @@ public class ClientOrderSummaryController {
     private ObservableList<BikeOrder> loadOrdersForClient(Client client) {
 
         ObservableList<BikeOrder> observableOrderList = FXCollections.observableArrayList();
-        observableOrderList.addAll(new ArrayList<>(BikeOrderDao.getInstance().getAllByClient(client)));
+        observableOrderList.addAll(client.getBikeOrders());
 
         return observableOrderList;
     }

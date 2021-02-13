@@ -18,8 +18,10 @@ import model.bikeservice.BikeOrder;
 import model.bikeservice.enums.OrderState;
 import model.user.Client;
 import model.user.Seller;
+import view.LoginDialog;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -34,13 +36,13 @@ public class SummaryController implements Initializable {
     private TextField surname;
 
     @FXML
-    private TextField phone;
-
-    @FXML
     private TextField street;
 
     @FXML
     private TextField city;
+
+    @FXML
+    private TextField email;
 
     @FXML
     private TextField postCode;
@@ -67,6 +69,8 @@ public class SummaryController implements Initializable {
     private HBox summaryButtons;
 
     private List<Bike> bikeList;
+
+    private Client client;
 
     private double summaryPrice;
 
@@ -97,17 +101,17 @@ public class SummaryController implements Initializable {
             insertLabel.setVisible(false);
             acceptButton.setVisible(false);
 
-            Client client = ClientDao.getInstance().getByLogin(name.getText());
-
             bikeList.forEach(bike -> {
                 setSummaryPrice(summaryPrice + bike.getCost());
             });
 
+            double discountedPrice = summaryPrice;
+
             if(client != null){
-                summaryPrice -= (((double)client.getDiscount()/100) * summaryPrice);
+                discountedPrice -= (((double)client.getDiscount()/100) * summaryPrice);
             }
 
-            bikeLabel.setText(summaryPrice + " PLN");
+            bikeLabel.setText(String.valueOf(discountedPrice) + " PLN");
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Wprowadź poprawnie wszystkie pola", ButtonType.OK);
             alert.showAndWait();
@@ -168,10 +172,13 @@ public class SummaryController implements Initializable {
     }
 
     private void summarizeOrderAndSave() {
-        String address = buildAddress(phone.getText(), street.getText(), city.getText(), postCode.getText());
+        String address = buildAddress(street.getText(), city.getText(), postCode.getText());
 
         Seller seller = new Seller("Maciek", "Lis", "Koszykowa 86, 01-400 Warszawa", "admin" , "admin", LocalDate.now(), 3000);
-        Client client = new Client(name.getText(), surname.getText(), address, name.getText(), "maciek");
+
+        if(client == null) {
+            client = new Client(name.getText(), surname.getText(), address, email.getText(), "admin");
+        }
 
         Client oldClient = ClientDao.getInstance().getByLogin(client.getLogin());
         Seller oldSeller = SellerDao.getInstance().getByLogin(seller.getLogin());
@@ -203,6 +210,9 @@ public class SummaryController implements Initializable {
         SellerDao.getInstance().update(seller);
 
         BikeDao.getInstance().updateAll(bikeList);
+
+        bikeList.clear();
+        summaryPrice = 0;
     }
 
     private void setSummaryPrice(double summaryPrice) {
@@ -221,14 +231,25 @@ public class SummaryController implements Initializable {
         this.orderController = orderController;
     }
 
-    void transferData(List<Bike> bikeList) {
+    void transferData(List<Bike> bikeList, Client client) {
         this.bikeList = bikeList;
+        this.client = client;
+
+        if(client != null){
+            name.setText(client.getName());
+            surname.setText(client.getSurname());
+            email.setText(client.getLogin());
+
+            String [] address = client.getAddress().split(",");
+
+            street.setText(address[0]);
+            city.setText(address[1]);
+            postCode.setText(address[2]);
+        }
     }
 
-    private String buildAddress(String phone, String street, String city, String postCode) {
-        return phone +
-                "," +
-                street +
+    private String buildAddress(String street, String city, String postCode) {
+        return  street +
                 "," +
                 city +
                 "," +

@@ -24,7 +24,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -32,17 +31,15 @@
          <children>
             <Label text="Imię" />
             <Label text="Nazwisko" GridPane.rowIndex="1" />
-            <Label text="Nr. telefonu" GridPane.rowIndex="3" />
-            <Label text="Ulica" GridPane.rowIndex="4" />
-            <Label text="Miasto" GridPane.rowIndex="5" />
-            <Label text="Kod pocztowy" GridPane.rowIndex="6" />
+            <Label text="Ulica" GridPane.rowIndex="3" />
+            <Label text="Miasto" GridPane.rowIndex="4" />
+            <Label text="Kod pocztowy" GridPane.rowIndex="5" />
             <TextField fx:id="name" prefWidth="248.0" GridPane.columnIndex="1" />
             <TextField fx:id="surname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="phone" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="street" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="city" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="postCode" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="street" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="city" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="postCode" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="E-mail" GridPane.rowIndex="2" />
          </children>
       </GridPane>

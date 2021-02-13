@@ -54,17 +54,4 @@ public class BikeOrderDao implements Dao<BikeOrder> {
         }
     }
 
-    public List<BikeOrder> getAllByClient(Client client) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String login = "'" + client.getLogin() + "'";
-            List<BikeOrder> bikeOrders = (List<BikeOrder>)session.createQuery("FROM model.bikeservice.BikeOrder WHERE client.login=" + login).list();
-            if(bikeOrders != null) {
-                return bikeOrders;
-            }
-        } catch (HibernateException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

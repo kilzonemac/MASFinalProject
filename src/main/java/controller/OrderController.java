@@ -1,6 +1,8 @@
 package controller;
 
 import dao.BikeDao;
+import dao.ClientDao;
+import dao.SellerDao;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +16,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.bikeservice.Bike;
+import model.user.Client;
+import model.user.Seller;
+import view.LoginDialog;
 
 import java.io.IOException;
 import java.net.URL;
@@ -96,30 +101,62 @@ public class OrderController implements Initializable {
         List<Bike> bikeList = orderedBikes.entrySet().stream().filter(e -> e.getValue().isSelected()).map(Map.Entry::getKey).collect(Collectors.toList());
 
         if (bikeList.size() > 0) {
-            loadSummaryScene(bikeList);
+            LoginDialog loginDialog = new LoginDialog(orderStage);
+
+            loginDialog.showAndWait();
+
+            Client client = null;
+
+            if(!(loginDialog.getLogin() == null || loginDialog.getPassword() == null)){
+                client = ClientDao.getInstance().getByLoginAndPassword(loginDialog.getLogin(), loginDialog.getPassword());
+            }
+
+            loadSummaryScene(bikeList, client);
         }
 
     }
 
     @FXML
     public void loadSellerWindow() {
-        try {
-            //Load second scene
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("sellerPanel.fxml")));
-            Parent root = loader.load();
+        LoginDialog loginDialog = new LoginDialog(orderStage);
 
-            //Show scene 2 in new window
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setScene(new Scene(root));
-            stage.setTitle("Seller Panel");
-            stage.show();
+        loginDialog.showAndWait();
 
-            //close main stage
-            orderStage.close();
+        Seller seller = null;
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        if(!(loginDialog.getLogin() == null || loginDialog.getPassword() == null)){
+            seller = SellerDao.getInstance().getByLoginAndPassword(loginDialog.getLogin(), loginDialog.getPassword());
+        }
+
+        if(seller != null) {
+            try {
+                //Load second scene
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("sellerPanel.fxml")));
+                Parent root = loader.load();
+
+                SellerController sellerController = loader.getController();
+
+                sellerController.setOrderStage(orderStage);
+
+
+                //Show scene 2 in new window
+                Stage stage = new Stage();
+                stage.setResizable(false);
+                stage.setScene(new Scene(root));
+                stage.setTitle("Seller Panel");
+                stage.show();
+
+                sellerController.setSellerStage(stage);
+
+                //hide main stage
+                orderStage.hide();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Podano błędne dane logowania", ButtonType.OK);
+            alert.showAndWait();
         }
     }
 
@@ -131,7 +168,7 @@ public class OrderController implements Initializable {
         return observableBikeList;
     }
 
-    private void loadSummaryScene(List<Bike> bikeList) {
+    private void loadSummaryScene(List<Bike> bikeList, Client client) {
         try {
             //Load second scene
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("data.fxml")));
@@ -149,7 +186,7 @@ public class OrderController implements Initializable {
             //close main stage
             orderStage.close();
 
-            summaryController.transferData(bikeList);
+            summaryController.transferData(bikeList, client);
             summaryController.setOrderStage(orderStage);
             summaryController.setStage(stage);
             summaryController.setOrderController(this);
